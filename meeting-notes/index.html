@@ -410,6 +410,35 @@
             font-weight: 500;
         }
 
+        .ri-content .source-quote {
+            display: block;
+            margin: 8px 0 6px;
+            padding: 8px 12px;
+            background: rgba(0,0,0,0.03);
+            border-left: 3px solid var(--border);
+            border-radius: 0 6px 6px 0;
+            font-size: 0.88em;
+            line-height: 1.6;
+            color: var(--text);
+            word-break: break-all;
+        }
+
+        .ri-content .source-quote .sq-label {
+            font-size: 0.78em;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-bottom: 2px;
+            display: block;
+        }
+
+        .ri-content .source-quote mark {
+            background: rgba(220, 38, 38, 0.15);
+            color: var(--error);
+            padding: 1px 3px;
+            border-radius: 2px;
+            font-weight: 600;
+        }
+
         /* === 原则卡片 === */
         .principles-grid {
             display: grid;
@@ -1106,14 +1135,31 @@
             let score = 100;
             const lines = notes.split('\n').filter(line => line.trim());
 
+            // ── 辅助函数：找到包含关键词的原文行，并高亮关键词 ──
+            function escapeHtml(str) {
+                return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+            }
+            function findLineWithWord(word) {
+                const line = lines.find(l => l.includes(word));
+                if (!line) return null;
+                const trimmed = line.trim();
+                const escaped = escapeHtml(trimmed);
+                const escapedWord = escapeHtml(word);
+                return escaped.replace(escapedWord, `<mark>${escapedWord}</mark>`);
+            }
+            function quoteBlock(highlightedLine) {
+                return `<span class="source-quote"><span class="sq-label">原文 ▸</span>${highlightedLine}</span>`;
+            }
+
             // ── 1. 格式/结构检查 ──
 
             // 1a. 缺少标题
             if (!notes.includes('纪要') && !notes.includes('同步') && !notes.includes('沟通') && !notes.includes('会议') && lines.length > 0) {
+                const firstLine = escapeHtml(lines[0].trim());
                 formatIssues.push({
                     type: 'warning',
                     title: '缺少标题',
-                    content: '建议在开头加一句话标题，如 "同步XX会议纪要" 或 "关于XX的沟通纪要"'
+                    content: `当前首行：${quoteBlock(firstLine)}建议在开头加一句话标题，如 <span class="suggest-text">同步XX会议纪要</span> 或 <span class="suggest-text">关于XX的沟通纪要</span>`
                 });
                 score -= 10;
             }
@@ -1129,7 +1175,7 @@
                 score -= 10;
             }
 
-            // ── 2. 模糊表达检测（核心新增） ──
+            // ── 2. 模糊表达检测 ──
 
             // 2a. 模糊承诺词
             const vaguePromises = [
@@ -1147,19 +1193,18 @@
 
             const foundVague = [];
             vaguePromises.forEach(v => {
-                const matches = notes.match(v.pattern);
-                if (matches) {
-                    foundVague.push(v);
-                }
+                if (notes.match(v.pattern)) foundVague.push(v);
             });
             if (foundVague.length > 0) {
-                const details = foundVague.map(v =>
-                    `<span class="highlight-text">${v.word}</span> → ${v.fix}`
-                ).join('<br>');
+                const details = foundVague.map(v => {
+                    const ql = findLineWithWord(v.word);
+                    return (ql ? quoteBlock(ql) : '') +
+                        `<span class="highlight-text">${v.word}</span> → ${v.fix}`;
+                }).join('<br>');
                 contentIssues.push({
                     type: 'error',
                     title: `发现 ${foundVague.length} 处模糊承诺`,
-                    content: `这些表述缺乏具体行动或目标，建议替换为可衡量的表达：<br>${details}`
+                    content: details
                 });
                 score -= Math.min(foundVague.length * 5, 20);
             }
@@ -1176,25 +1221,23 @@
 
             const foundVagueTime = [];
             vagueTime.forEach(v => {
-                const matches = notes.match(v.pattern);
-                if (matches) {
-                    foundVagueTime.push(v);
-                }
+                if (notes.match(v.pattern)) foundVagueTime.push(v);
             });
             if (foundVagueTime.length > 0) {
-                const details = foundVagueTime.map(v =>
-                    `<span class="highlight-text">${v.word}</span> → ${v.fix}`
-                ).join('<br>');
+                const details = foundVagueTime.map(v => {
+                    const ql = findLineWithWord(v.word);
+                    return (ql ? quoteBlock(ql) : '') +
+                        `<span class="highlight-text">${v.word}</span> → ${v.fix}`;
+                }).join('<br>');
                 contentIssues.push({
                     type: 'warning',
                     title: `发现 ${foundVagueTime.length} 处模糊时间表达`,
-                    content: `纪要中的时间节点应当具体可追踪：<br>${details}`
+                    content: details
                 });
                 score -= Math.min(foundVagueTime.length * 4, 15);
             }
 
-            // 2c. 行动事项缺时间节点（核心新增）
-            // 检测逻辑：如果纪要中提到了"要做/计划做"某事，检查该句是否包含具体时间
+            // 2c. 行动事项缺时间节点
             const actionVerbs = [
                 '上线', '灰度', '放量', '启动', '开发', '接入', '对接', '排期',
                 '迁移', '推广', '发布', '测试', '联调', '提审', '回归', '部署',
@@ -1204,28 +1247,27 @@
 
             const actionNoTime = [];
             lines.forEach(line => {
-                // 对每一行，检查是否包含行动动词
                 const foundActions = actionVerbs.filter(v => line.includes(v));
-                if (foundActions.length > 0) {
-                    // 检查这一行是否有时间标记
-                    if (!timeIndicators.test(line)) {
-                        // 找出缺时间的行动词（取第一个就好）
-                        actionNoTime.push({
-                            verb: foundActions[0],
-                            line: line.trim().substring(0, 50) + (line.trim().length > 50 ? '…' : '')
-                        });
-                    }
+                if (foundActions.length > 0 && !timeIndicators.test(line)) {
+                    actionNoTime.push({
+                        verb: foundActions[0],
+                        line: line.trim()
+                    });
                 }
             });
 
             if (actionNoTime.length > 0) {
-                const details = actionNoTime.slice(0, 5).map(a =>
-                    `提到 <span class="highlight-text">${a.verb}</span> 但未标注时间 → "${a.line}"`
-                ).join('<br>');
+                const details = actionNoTime.slice(0, 5).map(a => {
+                    const escaped = escapeHtml(a.line);
+                    const escapedVerb = escapeHtml(a.verb);
+                    const highlighted = escaped.replace(escapedVerb, `<mark>${escapedVerb}</mark>`);
+                    return quoteBlock(highlighted) +
+                        `提到 <span class="highlight-text">${escapeHtml(a.verb)}</span> 但未标注时间`;
+                }).join('<br>');
                 contentIssues.push({
                     type: 'error',
                     title: `${actionNoTime.length} 处行动事项缺时间节点`,
-                    content: `纪要中提到要做的事情必须标记时间（启动时间/上线时间/灰度时间等），否则无法追踪：<br>${details}<br><br>建议格式：<span class="suggest-text">"xx功能3月15日上线"</span> <span class="suggest-text">"3月20日灰度10%，4月1日全量"</span>`
+                    content: `${details}<br><br>建议格式：<span class="suggest-text">"xx功能3月15日上线"</span> <span class="suggest-text">"3月20日灰度10%，4月1日全量"</span>`
                 });
                 score -= Math.min(actionNoTime.length * 6, 20);
             }
@@ -1248,21 +1290,23 @@
 
             const foundVagueQuality = [];
             vagueQuality.forEach(v => {
-                const matches = notes.match(v.pattern);
-                if (matches) {
-                    foundVagueQuality.push(v.word);
-                }
+                if (notes.match(v.pattern)) foundVagueQuality.push(v);
             });
             if (foundVagueQuality.length > 0) {
+                const details = foundVagueQuality.map(v => {
+                    const ql = findLineWithWord(v.word);
+                    return (ql ? quoteBlock(ql) : '') +
+                        `<span class="highlight-text">${v.word}</span> → 建议替换为具体数字`;
+                }).join('<br>');
                 contentIssues.push({
                     type: 'warning',
                     title: `发现 ${foundVagueQuality.length} 处模糊程度词`,
-                    content: `<span class="highlight-text">${foundVagueQuality.join('</span>、<span class="highlight-text">')}</span> — 这些词缺少量化支撑。建议替换为具体数字，如 <span class="suggest-text">达成率105%</span>、<span class="suggest-text">环比+20%</span>、<span class="suggest-text">CTR提升0.5pp</span>`
+                    content: `${details}<br>如 <span class="suggest-text">达成率105%</span>、<span class="suggest-text">环比+20%</span>、<span class="suggest-text">CTR提升0.5pp</span>`
                 });
                 score -= Math.min(foundVagueQuality.length * 4, 15);
             }
 
-            // ── 3. 对比缺量化检测（核心新增） ──
+            // ── 3. 对比缺量化检测 ──
 
             const comparisonPatterns = [
                 /较(?:以往|之前|过去|去年|上月|上周|往常|历史|此前|原来)\S{0,6}(?:严格|宽松|高|低|多|少|好|差|强|弱|大|小|长|短|快|慢|紧|松)/g,
@@ -1276,7 +1320,6 @@
                 if (m) comparisonMatches.push(...m);
             });
 
-            // 检查对比句后面是否跟了数据
             if (comparisonMatches.length > 0) {
                 const unquantified = comparisonMatches.filter(match => {
                     const idx = notes.indexOf(match);
@@ -1284,16 +1327,21 @@
                     return !/\d+%|\d+万|\d+元|\d+\.\d+/.test(after);
                 });
                 if (unquantified.length > 0) {
+                    const details = unquantified.map(match => {
+                        const ql = findLineWithWord(match);
+                        return (ql ? quoteBlock(ql) : '') +
+                            `<span class="highlight-text">${escapeHtml(match)}</span> 后面缺少参照数据`;
+                    }).join('<br>');
                     dataIssues.push({
                         type: 'error',
                         title: `发现 ${unquantified.length} 处对比缺量化`,
-                        content: `<span class="highlight-text">${unquantified.join('</span>、<span class="highlight-text">')}</span><br>有对比就必须附上参照数据。例如 "较以往严格" 后面要接 <span class="suggest-text">"历史CPA均值32元，本次要求25元，降幅22%"</span>`
+                        content: `${details}<br>建议：对比后面接上 <span class="suggest-text">"历史CPA均值32元，本次要求25元，降幅22%"</span>`
                     });
                     score -= Math.min(unquantified.length * 8, 20);
                 }
             }
 
-            // ── 4. 收入指标缺周期对比检测（核心新增） ──
+            // ── 4. 收入指标缺周期对比检测 ──
 
             const revenuePatterns = /(?:收入|营收|GMV|日耗|消耗|流水|收益)(?:[^，。；\n]{0,15}?)(\d+(?:\.\d+)?万|\d+(?:\.\d+)?亿|\d+(?:\.\d+)?百万)/g;
             const revenueMatches = [];
@@ -1307,7 +1355,6 @@
 
             if (revenueMatches.length > 0) {
                 const noComparison = revenueMatches.filter(rm => {
-                    // 检查这句话附近（前后80字）有没有环比/同比
                     const start = Math.max(0, rm.index - 30);
                     const end = Math.min(notes.length, rm.index + rm.text.length + 80);
                     const context = notes.slice(start, end);
@@ -1315,13 +1362,15 @@
                 });
 
                 if (noComparison.length > 0) {
-                    const examples = noComparison.slice(0, 3).map(rm =>
-                        `<span class="highlight-text">${rm.text}</span>`
-                    ).join('、');
+                    const details = noComparison.slice(0, 3).map(rm => {
+                        const ql = findLineWithWord(rm.text);
+                        return (ql ? quoteBlock(ql) : '') +
+                            `<span class="highlight-text">${escapeHtml(rm.text)}</span> 缺少环比/同比`;
+                    }).join('<br>');
                     dataIssues.push({
                         type: 'warning',
                         title: `${noComparison.length} 处收入数据缺少周期对比`,
-                        content: `${examples} — 收入类指标建议补充环比或同比数据，帮助读者判断趋势。如 <span class="suggest-text">"收入100万，环比+35%/同比+120%"</span>`
+                        content: `${details}<br>建议补充：<span class="suggest-text">"收入100万，环比+35%/同比+120%"</span>`
                     });
                     score -= Math.min(noComparison.length * 5, 15);
                 }
@@ -1346,7 +1395,7 @@
                 formatIssues.push({
                     type: 'warning',
                     title: '缺少时间节点',
-                    content: '建议明确下一步行动的时间节点，如 "3月20日上线""本周五完成""Q2启动"'
+                    content: '建议明确下一步行动的时间节点，如 <span class="suggest-text">3月20日上线</span> <span class="suggest-text">本周五完成</span> <span class="suggest-text">Q2启动</span>'
                 });
                 score -= 10;
             }
@@ -1355,10 +1404,15 @@
 
             const longLines = lines.filter(line => line.length > 100);
             if (longLines.length > 0) {
+                const details = longLines.slice(0, 3).map(l => {
+                    const trimmed = l.trim();
+                    const escaped = escapeHtml(trimmed.substring(0, 80)) + (trimmed.length > 80 ? '…' : '');
+                    return quoteBlock(escaped + ` <mark>(${trimmed.length}字)</mark>`);
+                }).join('');
                 formatIssues.push({
                     type: 'info',
                     title: `${longLines.length} 行过于冗长`,
-                    content: `发现 ${longLines.length} 行超过 100 字，建议拆分或精简，每点控制在 2-3 句话`
+                    content: `${details}建议拆分或精简，每点控制在 2-3 句话`
                 });
                 score -= Math.min(longLines.length * 3, 10);
             }
@@ -1376,10 +1430,14 @@
             });
             if (informalWords.length > 0) {
                 const unique = [...new Set(informalWords)];
+                const details = unique.map(w => {
+                    const ql = findLineWithWord(w);
+                    return ql ? quoteBlock(ql) : '';
+                }).filter(Boolean).join('');
                 contentIssues.push({
                     type: 'info',
                     title: '建议去除口语化表达',
-                    content: `<span class="highlight-text">${unique.join('</span>、<span class="highlight-text">')}</span> — 去除冗余表述，直接陈述事实和结论`
+                    content: `${details}<span class="highlight-text">${unique.join('</span>、<span class="highlight-text">')}</span> — 去除冗余表述，直接陈述事实和结论`
                 });
                 score -= Math.min(unique.length * 3, 10);
             }
@@ -1391,7 +1449,7 @@
                 contentIssues.push({
                     type: 'warning',
                     title: '缺少行动导向',
-                    content: '建议明确下一步要做什么。使用行动词如 "启动""上线""拓展""优化" 开头'
+                    content: '建议明确下一步要做什么。使用行动词如 <span class="suggest-text">启动</span> <span class="suggest-text">上线</span> <span class="suggest-text">拓展</span> <span class="suggest-text">优化</span> 开头'
                 });
                 score -= 10;
             }
