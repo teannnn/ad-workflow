@@ -283,6 +283,11 @@
             color: var(--text-muted);
         }
 
+        .length-warn {
+            color: var(--error) !important;
+            font-weight: 600;
+        }
+
         /* === 分析结果 === */
         .result {
             margin-top: 24px;
@@ -323,10 +328,24 @@
         .score-mid { background: var(--warning-light); color: var(--warning); }
         .score-low { background: var(--error-light); color: var(--error); }
 
+        .result-category {
+            margin-bottom: 16px;
+        }
+
+        .result-category-title {
+            font-size: 0.8em;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            padding-left: 4px;
+        }
+
         .result-item {
             padding: 14px 16px;
             border-radius: var(--radius-sm);
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             display: flex;
             align-items: flex-start;
             gap: 12px;
@@ -366,6 +385,28 @@
             font-size: 0.85em;
             color: var(--text-secondary);
             line-height: 1.5;
+        }
+
+        .ri-content .highlight-text {
+            display: inline-block;
+            background: rgba(217, 119, 6, 0.12);
+            padding: 1px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 0.95em;
+            color: var(--warning);
+            font-weight: 500;
+        }
+
+        .ri-content .suggest-text {
+            display: inline-block;
+            background: rgba(5, 150, 105, 0.1);
+            padding: 1px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 0.95em;
+            color: var(--success);
+            font-weight: 500;
         }
 
         /* === 原则卡片 === */
@@ -442,6 +483,10 @@
             border-left: 3px solid var(--accent);
         }
 
+        .principle-example-bad {
+            border-left-color: var(--error);
+        }
+
         .principle-example p {
             font-size: 0.85em;
             color: var(--text-secondary);
@@ -455,6 +500,10 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 4px;
+        }
+
+        .principle-example-bad .ex-label {
+            color: var(--error);
         }
 
         /* === 案例区 === */
@@ -503,6 +552,18 @@
             font-weight: 700;
             color: var(--text);
         }
+
+        .case-tag {
+            margin-left: auto;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.72em;
+            font-weight: 600;
+        }
+
+        .case-tag-vague { background: var(--error-light); color: var(--error); }
+        .case-tag-structure { background: var(--accent-light); color: var(--accent); }
+        .case-tag-data { background: var(--warning-light); color: var(--warning); }
 
         .case-annotation {
             padding: 0 22px 16px;
@@ -570,6 +631,14 @@
             background: rgba(5, 150, 105, 0.1);
             padding: 1px 4px;
             border-radius: 3px;
+            font-weight: 500;
+        }
+
+        .case-problem {
+            background: rgba(220, 38, 38, 0.08);
+            padding: 1px 4px;
+            border-radius: 3px;
+            color: var(--error);
             font-weight: 500;
         }
 
@@ -705,12 +774,12 @@
                 <h2>纪要美化工具</h2>
             </div>
             <div class="tool-card">
-                <p class="tool-desc">粘贴你的会议纪要，基于 5 大核心原则快速获取改进建议。所有分析在浏览器本地完成，内容不会上传。</p>
-                <textarea id="meetingNotes" placeholder="在这里粘贴你的会议纪要内容…&#10;&#10;例如：&#10;1、收入情况：Q1完成1200万...&#10;2、重点进展：…"></textarea>
+                <p class="tool-desc">粘贴你的会议纪要，从格式结构到文字表述深度分析 8 大维度。所有分析在浏览器本地完成，内容不会上传。</p>
+                <textarea id="meetingNotes" placeholder="在这里粘贴你的会议纪要内容…&#10;&#10;例如：&#10;1、收入情况：Q1完成1200万，环比+15%...&#10;2、重点进展：xx功能3月15日上线，放量到30%..."></textarea>
                 <div class="tool-actions">
                     <button class="btn btn-primary" onclick="analyzeNotes()">
                         <i data-lucide="scan-search" style="width:16px;height:16px;"></i>
-                        获取改进建议
+                        深度分析
                     </button>
                     <button class="btn btn-secondary" onclick="clearNotes()">
                         <i data-lucide="eraser" style="width:16px;height:16px;"></i>
@@ -735,72 +804,114 @@
                 <div class="section-icon" style="background:var(--accent-light);color:var(--accent);">
                     <i data-lucide="book-open-text"></i>
                 </div>
-                <h2>5 大核心原则</h2>
+                <h2>8 大核心原则</h2>
             </div>
             <div class="principles-grid">
                 <div class="principle-card">
                     <div class="principle-num">1</div>
-                    <h3>结论先行，数据支撑</h3>
+                    <h3>事实具体，拒绝模糊</h3>
                     <ul>
-                        <li>先说目标/结果，再说背景/原因</li>
-                        <li>关键结论必须有具体数据支撑</li>
-                        <li>使用对比增强说服力（环比、同比、竞品对比）</li>
+                        <li>用具体事实代替模糊承诺</li>
+                        <li>写出具体日期、百分比、金额</li>
+                        <li>避免"争取多做""一起努力"等空话</li>
                     </ul>
+                    <div class="principle-example principle-example-bad">
+                        <div class="ex-label">❌ 模糊表达</div>
+                        <p>即将上线；争取多做；超出预期</p>
+                    </div>
                     <div class="principle-example">
-                        <div class="ex-label">✅ 好的示范</div>
-                        <p>收入：Q1完成1200万/完成率98%；Q2目标1800万，环比+50%/同比+21%</p>
+                        <div class="ex-label">✅ 事实表达</div>
+                        <p>3月15日上线；放量到20%；达成率105%</p>
                     </div>
                 </div>
 
                 <div class="principle-card">
                     <div class="principle-num">2</div>
-                    <h3>极简精炼，去除废话</h3>
+                    <h3>对比必须量化</h3>
                     <ul>
-                        <li>每点控制在 2-3 句话</li>
-                        <li>去掉"今天"、"我们讨论了"等冗余表述</li>
-                        <li>直接说做了什么、为什么、下一步做什么</li>
+                        <li>有对比就必须有参照数据</li>
+                        <li>"比以往严格"要接上以往的数据</li>
+                        <li>让读者能量化对比幅度</li>
                     </ul>
+                    <div class="principle-example principle-example-bad">
+                        <div class="ex-label">❌ 对比无量化</div>
+                        <p>本次考核较以往严格</p>
+                    </div>
                     <div class="principle-example">
-                        <div class="ex-label">✅ 好的示范</div>
-                        <p>Q2重点拓展"虎牙/起点/狗概"等腰部媒体</p>
+                        <div class="ex-label">✅ 对比有量化</div>
+                        <p>本次CPA考核25元，较历史均值32元降低22%</p>
                     </div>
                 </div>
 
                 <div class="principle-card">
                     <div class="principle-num">3</div>
-                    <h3>结构清晰，逻辑分明</h3>
+                    <h3>收入必带周期对比</h3>
                     <ul>
-                        <li>使用"1、2、3"或"一、二、三"分层编号</li>
-                        <li>每点聚焦一个核心主题，不混用</li>
-                        <li>先总结现状，再讲问题，最后给计划</li>
+                        <li>收入指标必须有环比或同比</li>
+                        <li>不能只写绝对值</li>
+                        <li>帮助读者判断趋势和增速</li>
                     </ul>
+                    <div class="principle-example principle-example-bad">
+                        <div class="ex-label">❌ 只有绝对值</div>
+                        <p>xx项目收入突破100万</p>
+                    </div>
                     <div class="principle-example">
-                        <div class="ex-label">✅ 好的示范</div>
-                        <p>1、收入情况；2、重点进展和瓶颈；3、重点计划</p>
+                        <div class="ex-label">✅ 带周期对比</div>
+                        <p>xx项目收入突破100万，环比+35%/同比+120%</p>
                     </div>
                 </div>
 
                 <div class="principle-card">
                     <div class="principle-num">4</div>
-                    <h3>行动导向，明确下一步</h3>
+                    <h3>结论先行，数据支撑</h3>
                     <ul>
-                        <li>明确责任人和时间节点</li>
-                        <li>指出具体要做的事情</li>
-                        <li>区分"已做"、"在做"、"待做"</li>
+                        <li>先说目标/结果，再说背景/原因</li>
+                        <li>关键结论必须有具体数据支撑</li>
+                        <li>使用对比增强说服力</li>
                     </ul>
                     <div class="principle-example">
                         <div class="ex-label">✅ 好的示范</div>
-                        <p>本周四已启动；PC试玩Q2上线</p>
+                        <p>Q1完成1200万/完成率98%；Q2目标1800万，环比+50%</p>
                     </div>
                 </div>
 
                 <div class="principle-card">
                     <div class="principle-num">5</div>
-                    <h3>受众适配，调整视角</h3>
+                    <h3>极简精炼，去除废话</h3>
                     <ul>
-                        <li>给领导：突出目标和挑战</li>
-                        <li>给平级/跨团队：突出行动和协同</li>
-                        <li>给下属：突出要求和时间</li>
+                        <li>每点控制在 2-3 句话</li>
+                        <li>去掉"今天""我们讨论了"等冗余</li>
+                        <li>直接说做了什么、为什么、下一步</li>
+                    </ul>
+                </div>
+
+                <div class="principle-card">
+                    <div class="principle-num">6</div>
+                    <h3>结构清晰，逻辑分明</h3>
+                    <ul>
+                        <li>使用编号分层，每点一个主题</li>
+                        <li>先总结现状，再讲问题，最后计划</li>
+                        <li>信息分类，避免混杂</li>
+                    </ul>
+                </div>
+
+                <div class="principle-card">
+                    <div class="principle-num">7</div>
+                    <h3>控制篇幅</h3>
+                    <ul>
+                        <li>手机一屏内读完（约 500 字以内）</li>
+                        <li>考虑微信群阅读场景</li>
+                        <li>超出则拆分或精简</li>
+                    </ul>
+                </div>
+
+                <div class="principle-card">
+                    <div class="principle-num">8</div>
+                    <h3>行动导向，明确下一步</h3>
+                    <ul>
+                        <li>明确责任人和时间节点</li>
+                        <li>区分"已做""在做""待做"</li>
+                        <li>用行动词开头：启动、上线、拓展</li>
                     </ul>
                 </div>
             </div>
@@ -821,6 +932,7 @@
                     <div class="case-header">
                         <div class="case-num">1</div>
                         <h3>关于平台侧的财报披露变化</h3>
+                        <span class="case-tag case-tag-structure">信息分层</span>
                     </div>
                     <div class="case-annotation">
                         <p>📝 <strong>批注：</strong>修改前的信息没有分层，修改后的版本既考虑到"新增披露"也考虑到"不再披露"，更加突出广告侧的高目标和挑战。</p>
@@ -848,6 +960,7 @@
                     <div class="case-header">
                         <div class="case-num">2</div>
                         <h3>关于业务进展的表述</h3>
+                        <span class="case-tag case-tag-vague">模糊→具体</span>
                     </div>
                     <div class="case-annotation">
                         <p>📝 <strong>批注：</strong>修改前没有突出效果挑战，看起来像常规进展；修改后讲出了广告收入下的效果挑战，同时也讲出了优化目标（做好留存和后效），表达要挖掘头客潜力（与会议上平台侧老板提出的方向呼应）。</p>
@@ -858,7 +971,7 @@
                                 <i data-lucide="x-circle" style="width:13px;height:13px;color:var(--text-muted);"></i>
                                 修改前
                             </div>
-                            <div class="case-text">网赚，聚焦行业专区的效果优化&酷狗提效，争取多做</div>
+                            <div class="case-text">网赚，聚焦行业专区的效果优化&酷狗提效，<span class="case-problem">争取多做</span></div>
                         </div>
                         <div class="case-after">
                             <div class="case-label">
@@ -884,27 +997,31 @@
                 <div class="tips-card tips-avoid">
                     <h3>
                         <span style="color:var(--error);">❌</span>
-                        避免这些错误
+                        这些表述要避免
                     </h3>
                     <ul>
-                        <li>流水账式记录，没有提炼重点</li>
-                        <li>缺少数据支撑，全是定性描述</li>
-                        <li>结构混乱，信息混杂</li>
-                        <li>没有明确下一步行动</li>
-                        <li>过于冗长，难以快速获取关键信息</li>
+                        <li>"争取多做""一起努力" → 空承诺</li>
+                        <li>"即将上线""近期" → 无具体时间</li>
+                        <li>"超出预期" → 不如写达成率105%</li>
+                        <li>"较以往严格" → 缺少参照数据</li>
+                        <li>"收入突破100万" → 缺环比/同比</li>
+                        <li>"效果不错""进展顺利" → 没有数据</li>
+                        <li>纪要超过500字 → 手机端读不完</li>
                     </ul>
                 </div>
                 <div class="tips-card tips-do">
                     <h3>
                         <span style="color:var(--success);">✅</span>
-                        掌握这些技巧
+                        用这些替代
                     </h3>
                     <ul>
-                        <li>先快速浏览，提炼 3-5 个核心要点</li>
-                        <li>每个要点先写结论，再补充背景</li>
-                        <li>用数据说话，避免"很多"、"显著"等模糊词</li>
-                        <li>检查是否有明确的时间节点和责任人</li>
-                        <li>站在读者角度：他们最关心什么？</li>
+                        <li>"3月15日上线" → 具体时间节点</li>
+                        <li>"放量到20%" → 量化进展</li>
+                        <li>"达成率105%" → 量化"超预期"</li>
+                        <li>"较历史均值32元降22%" → 对比有锚</li>
+                        <li>"环比+35%/同比+120%" → 周期对比</li>
+                        <li>"CPA 25元，CTR 3.2%" → 数据说话</li>
+                        <li>控制在500字以内 → 一屏读完</li>
                     </ul>
                 </div>
             </div>
@@ -921,19 +1038,32 @@
         // 初始化 Lucide 图标
         lucide.createIcons();
 
-        // 字数统计
+        // 字数统计 + 长度预警
         const textarea = document.getElementById('meetingNotes');
         const charCount = document.getElementById('charCount');
+        const OPTIMAL_LENGTH = 500;
+
         textarea.addEventListener('input', () => {
-            charCount.textContent = textarea.value.length + ' 字';
+            const len = textarea.value.length;
+            charCount.textContent = len + ' 字';
+            if (len > OPTIMAL_LENGTH) {
+                charCount.classList.add('length-warn');
+                charCount.textContent = len + ' 字 ⚠️ 建议 ≤' + OPTIMAL_LENGTH;
+            } else {
+                charCount.classList.remove('length-warn');
+            }
         });
 
         function clearNotes() {
             textarea.value = '';
             charCount.textContent = '0 字';
+            charCount.classList.remove('length-warn');
             document.getElementById('result').classList.remove('show');
         }
 
+        // ================================================================
+        //  深度分析引擎 v2
+        // ================================================================
         function analyzeNotes() {
             const notes = textarea.value.trim();
             const resultDiv = document.getElementById('result');
@@ -947,105 +1077,303 @@
                 return;
             }
 
-            let suggestions = [];
+            // 分类收集建议
+            const formatIssues = [];   // 格式/结构
+            const contentIssues = [];  // 内容/表述
+            const dataIssues = [];     // 数据/量化
+            const lengthIssues = [];   // 篇幅
             let score = 100;
             const lines = notes.split('\n').filter(line => line.trim());
 
-            // 检查是否有标题
+            // ── 1. 格式/结构检查 ──
+
+            // 1a. 缺少标题
             if (!notes.includes('纪要') && !notes.includes('同步') && !notes.includes('沟通') && !notes.includes('会议') && lines.length > 0) {
-                suggestions.push({
+                formatIssues.push({
                     type: 'warning',
                     title: '缺少标题',
-                    content: '建议在开头添加一句话标题，格式如："同步XX会议纪要"或"关于XX的沟通纪要"'
-                });
-                score -= 15;
-            }
-
-            // 检查是否使用数据
-            const hasNumbers = /\d+万|\d+%|\d+\.\d+|\d+月|\d+日/.test(notes);
-            if (!hasNumbers && lines.length > 3) {
-                suggestions.push({
-                    type: 'warning',
-                    title: '缺少数据支撑',
-                    content: '建议在关键结论中加入具体数据，如收入、完成率、增长率等，增强说服力'
-                });
-                score -= 20;
-            }
-
-            // 检查是否过于冗长
-            const longLines = lines.filter(line => line.length > 100);
-            if (longLines.length > 0) {
-                suggestions.push({
-                    type: 'info',
-                    title: '建议精炼表达',
-                    content: `发现 ${longLines.length} 行过于冗长（超过100字），建议拆分成多条或精简表述，每点控制在2-3句话`
+                    content: '建议在开头加一句话标题，如 "同步XX会议纪要" 或 "关于XX的沟通纪要"'
                 });
                 score -= 10;
             }
 
-            // 检查是否有时间节点
-            const hasTime = /本周|下周|Q[1-4]|H[12]|月底|月|日|已启动|上线|截止/.test(notes);
-            if (!hasTime && lines.length > 2) {
-                suggestions.push({
-                    type: 'warning',
-                    title: '缺少时间节点',
-                    content: '建议明确下一步行动的时间节点，如"本周启动"、"Q2上线"等'
-                });
-                score -= 15;
-            }
-
-            // 检查是否使用对比
-            const hasComparison = /环比|同比|vs|对比|较/.test(notes);
-            if (!hasComparison && hasNumbers && lines.length > 3) {
-                suggestions.push({
-                    type: 'info',
-                    title: '可增加对比维度',
-                    content: '建议加入环比、同比或竞品对比，让数据更有说服力'
-                });
-                score -= 8;
-            }
-
-            // 检查结构
-            const hasStructure = lines.some(line => /^\d+[、.）)]|^[一二三四五六七八九十]+、|^[-•]/.test(line.trim()));
-            if (!hasStructure && lines.length > 5) {
-                suggestions.push({
+            // 1b. 结构编号
+            const hasStructure = lines.some(line => /^\d+[、.）)]|^[一二三四五六七八九十]+、|^[-•]|^（\d+）/.test(line.trim()));
+            if (!hasStructure && lines.length > 4) {
+                formatIssues.push({
                     type: 'warning',
                     title: '结构不够清晰',
-                    content: '建议使用"1、2、3"或"一、二、三"进行分点编号，让结构更清晰'
+                    content: '建议使用 "1、2、3" 或 "一、二、三" 进行分点编号，每点聚焦一个核心主题'
                 });
-                score -= 15;
+                score -= 10;
             }
 
-            // 检查是否有行动导向
-            const hasAction = /启动|上线|拓展|优化|提升|建设|对接|落地|推进|挖掘|聚焦/.test(notes);
-            if (!hasAction && lines.length > 2) {
-                suggestions.push({
+            // ── 2. 模糊表达检测（核心新增） ──
+
+            // 2a. 模糊承诺词
+            const vaguePromises = [
+                { pattern: /争取多做/g, word: '争取多做', fix: '写出具体目标，如"目标日耗提升至50万"' },
+                { pattern: /一起努力/g, word: '一起努力', fix: '明确具体行动，如"XX团队本周完成对接"' },
+                { pattern: /尽量/g, word: '尽量', fix: '明确做到什么程度，如"争取Q2完成率达95%以上"' },
+                { pattern: /尽快/g, word: '尽快', fix: '给出时间节点，如"本周五前完成"' },
+                { pattern: /加大力度/g, word: '加大力度', fix: '量化力度，如"预算从20万提升至35万"' },
+                { pattern: /持续推进/g, word: '持续推进', fix: '说明推进到什么阶段、什么节点' },
+                { pattern: /积极配合/g, word: '积极配合', fix: '说明配合的具体动作和产出' },
+                { pattern: /继续跟进/g, word: '继续跟进', fix: '说明跟进的下一个里程碑' },
+                { pattern: /大力发展/g, word: '大力发展', fix: '用目标数字替代，如"Q2新增客户50+"' },
+                { pattern: /深入探索/g, word: '深入探索', fix: '说明探索的方向和预期产出' },
+            ];
+
+            const foundVague = [];
+            vaguePromises.forEach(v => {
+                const matches = notes.match(v.pattern);
+                if (matches) {
+                    foundVague.push(v);
+                }
+            });
+            if (foundVague.length > 0) {
+                const details = foundVague.map(v =>
+                    `<span class="highlight-text">${v.word}</span> → ${v.fix}`
+                ).join('<br>');
+                contentIssues.push({
+                    type: 'error',
+                    title: `发现 ${foundVague.length} 处模糊承诺`,
+                    content: `这些表述缺乏具体行动或目标，建议替换为可衡量的表达：<br>${details}`
+                });
+                score -= Math.min(foundVague.length * 5, 20);
+            }
+
+            // 2b. 模糊时间词
+            const vagueTime = [
+                { pattern: /即将上线/g, word: '即将上线', fix: '写出具体日期，如"3月20日上线"' },
+                { pattern: /近期/g, word: '近期', fix: '明确时间范围，如"本周""3月底前"' },
+                { pattern: /后续/g, word: '后续', fix: '指明具体时间节点，如"Q2启动""4月前完成"' },
+                { pattern: /稍后/g, word: '稍后', fix: '明确什么时候，如"今天下午""明天中午前"' },
+                { pattern: /计划中/g, word: '计划中', fix: '说明计划的时间表和里程碑' },
+                { pattern: /下阶段/g, word: '下阶段', fix: '明确哪个季度或哪个月' },
+            ];
+
+            const foundVagueTime = [];
+            vagueTime.forEach(v => {
+                const matches = notes.match(v.pattern);
+                if (matches) {
+                    foundVagueTime.push(v);
+                }
+            });
+            if (foundVagueTime.length > 0) {
+                const details = foundVagueTime.map(v =>
+                    `<span class="highlight-text">${v.word}</span> → ${v.fix}`
+                ).join('<br>');
+                contentIssues.push({
                     type: 'warning',
-                    title: '缺少行动导向',
-                    content: '建议明确下一步要做什么，使用行动词汇如"启动"、"上线"、"拓展"、"优化"等'
+                    title: `发现 ${foundVagueTime.length} 处模糊时间表达`,
+                    content: `纪要中的时间节点应当具体可追踪：<br>${details}`
+                });
+                score -= Math.min(foundVagueTime.length * 4, 15);
+            }
+
+            // 2c. 模糊程度词（缺数据支撑）
+            const vagueQuality = [
+                { pattern: /效果不错/g, word: '效果不错' },
+                { pattern: /表现良好/g, word: '表现良好' },
+                { pattern: /进展顺利/g, word: '进展顺利' },
+                { pattern: /超出预期/g, word: '超出预期' },
+                { pattern: /不及预期/g, word: '不及预期' },
+                { pattern: /大幅增长/g, word: '大幅增长' },
+                { pattern: /大幅下降/g, word: '大幅下降' },
+                { pattern: /明显提升/g, word: '明显提升' },
+                { pattern: /明显下滑/g, word: '明显下滑' },
+                { pattern: /有所改善/g, word: '有所改善' },
+                { pattern: /有所下降/g, word: '有所下降' },
+                { pattern: /显著增长/g, word: '显著增长' },
+            ];
+
+            const foundVagueQuality = [];
+            vagueQuality.forEach(v => {
+                const matches = notes.match(v.pattern);
+                if (matches) {
+                    foundVagueQuality.push(v.word);
+                }
+            });
+            if (foundVagueQuality.length > 0) {
+                contentIssues.push({
+                    type: 'warning',
+                    title: `发现 ${foundVagueQuality.length} 处模糊程度词`,
+                    content: `<span class="highlight-text">${foundVagueQuality.join('</span>、<span class="highlight-text">')}</span> — 这些词缺少量化支撑。建议替换为具体数字，如 <span class="suggest-text">达成率105%</span>、<span class="suggest-text">环比+20%</span>、<span class="suggest-text">CTR提升0.5pp</span>`
+                });
+                score -= Math.min(foundVagueQuality.length * 4, 15);
+            }
+
+            // ── 3. 对比缺量化检测（核心新增） ──
+
+            const comparisonPatterns = [
+                /较(?:以往|之前|过去|去年|上月|上周|往常|历史|此前|原来)\S{0,6}(?:严格|宽松|高|低|多|少|好|差|强|弱|大|小|长|短|快|慢|紧|松)/g,
+                /比(?:以往|之前|过去|去年|上月|上周|往常|历史|此前|原来)\S{0,6}(?:严格|宽松|高|低|多|少|好|差|强|弱|大|小|长|短|快|慢|紧|松)/g,
+                /(?:相比|对比|相较)(?:以往|之前|过去|去年|上月|上周|往常|此前).{0,20}(?:提升|下降|增长|减少|增加|降低)/g,
+            ];
+
+            const comparisonMatches = [];
+            comparisonPatterns.forEach(p => {
+                const m = notes.match(p);
+                if (m) comparisonMatches.push(...m);
+            });
+
+            // 检查对比句后面是否跟了数据
+            if (comparisonMatches.length > 0) {
+                const unquantified = comparisonMatches.filter(match => {
+                    const idx = notes.indexOf(match);
+                    const after = notes.slice(idx, idx + match.length + 40);
+                    return !/\d+%|\d+万|\d+元|\d+\.\d+/.test(after);
+                });
+                if (unquantified.length > 0) {
+                    dataIssues.push({
+                        type: 'error',
+                        title: `发现 ${unquantified.length} 处对比缺量化`,
+                        content: `<span class="highlight-text">${unquantified.join('</span>、<span class="highlight-text">')}</span><br>有对比就必须附上参照数据。例如 "较以往严格" 后面要接 <span class="suggest-text">"历史CPA均值32元，本次要求25元，降幅22%"</span>`
+                    });
+                    score -= Math.min(unquantified.length * 8, 20);
+                }
+            }
+
+            // ── 4. 收入指标缺周期对比检测（核心新增） ──
+
+            const revenuePatterns = /(?:收入|营收|GMV|日耗|消耗|流水|收益)(?:[^，。；\n]{0,15}?)(\d+(?:\.\d+)?万|\d+(?:\.\d+)?亿|\d+(?:\.\d+)?百万)/g;
+            const revenueMatches = [];
+            let revenueMatch;
+            while ((revenueMatch = revenuePatterns.exec(notes)) !== null) {
+                revenueMatches.push({
+                    text: revenueMatch[0],
+                    index: revenueMatch.index
+                });
+            }
+
+            if (revenueMatches.length > 0) {
+                const noComparison = revenueMatches.filter(rm => {
+                    // 检查这句话附近（前后80字）有没有环比/同比
+                    const start = Math.max(0, rm.index - 30);
+                    const end = Math.min(notes.length, rm.index + rm.text.length + 80);
+                    const context = notes.slice(start, end);
+                    return !/环比|同比|MoM|YoY|较上月|较去年|较上周|增长率|增速/.test(context);
+                });
+
+                if (noComparison.length > 0) {
+                    const examples = noComparison.slice(0, 3).map(rm =>
+                        `<span class="highlight-text">${rm.text}</span>`
+                    ).join('、');
+                    dataIssues.push({
+                        type: 'warning',
+                        title: `${noComparison.length} 处收入数据缺少周期对比`,
+                        content: `${examples} — 收入类指标建议补充环比或同比数据，帮助读者判断趋势。如 <span class="suggest-text">"收入100万，环比+35%/同比+120%"</span>`
+                    });
+                    score -= Math.min(noComparison.length * 5, 15);
+                }
+            }
+
+            // ── 5. 数据支撑检查 ──
+
+            const hasNumbers = /\d+万|\d+%|\d+\.\d+|\d+月\d+日|\d+元|\d+亿/.test(notes);
+            if (!hasNumbers && lines.length > 3) {
+                dataIssues.push({
+                    type: 'error',
+                    title: '整体缺少数据支撑',
+                    content: '纪要中未发现任何具体数据。建议在关键结论中加入数字（收入、完成率、增长率、日期等），增强说服力'
                 });
                 score -= 15;
             }
 
-            // 检查是否过于口语化
-            const informalWords = notes.match(/我们大家|大家一起|我们讨论了|我们觉得|我觉得|今天开会/g);
-            if (informalWords) {
-                suggestions.push({
+            // ── 6. 是否有时间节点 ──
+
+            const hasTime = /本周|下周|Q[1-4]|H[12]|\d+月\d+日|\d+月底|已启动|上线|截止|本月|下月|\d{1,2}\/\d{1,2}|\d{1,2}\.\d{1,2}/.test(notes);
+            if (!hasTime && lines.length > 2) {
+                formatIssues.push({
+                    type: 'warning',
+                    title: '缺少时间节点',
+                    content: '建议明确下一步行动的时间节点，如 "3月20日上线""本周五完成""Q2启动"'
+                });
+                score -= 10;
+            }
+
+            // ── 7. 冗长行检查 ──
+
+            const longLines = lines.filter(line => line.length > 100);
+            if (longLines.length > 0) {
+                formatIssues.push({
+                    type: 'info',
+                    title: `${longLines.length} 行过于冗长`,
+                    content: `发现 ${longLines.length} 行超过 100 字，建议拆分或精简，每点控制在 2-3 句话`
+                });
+                score -= Math.min(longLines.length * 3, 10);
+            }
+
+            // ── 8. 口语化表达 ──
+
+            const informalPatterns = [
+                /我们大家/g, /大家一起/g, /我们讨论了/g, /我们觉得/g,
+                /我觉得/g, /今天开会/g, /开会讨论/g, /会上提到/g
+            ];
+            const informalWords = [];
+            informalPatterns.forEach(p => {
+                const m = notes.match(p);
+                if (m) informalWords.push(...m);
+            });
+            if (informalWords.length > 0) {
+                const unique = [...new Set(informalWords)];
+                contentIssues.push({
                     type: 'info',
                     title: '建议去除口语化表达',
-                    content: `发现口语化表达（${informalWords.join('、')}），建议去除冗余表述，直接陈述事实和结论`
+                    content: `<span class="highlight-text">${unique.join('</span>、<span class="highlight-text">')}</span> — 去除冗余表述，直接陈述事实和结论`
                 });
-                score -= 8;
+                score -= Math.min(unique.length * 3, 10);
             }
 
-            // 分数
-            score = Math.max(score, 20);
+            // ── 9. 行动导向检查 ──
 
-            if (suggestions.length === 0) {
-                suggestions.push({
+            const hasAction = /启动|上线|拓展|优化|提升|建设|对接|落地|推进|挖掘|聚焦|目标|下一步|计划|落实/.test(notes);
+            if (!hasAction && lines.length > 2) {
+                contentIssues.push({
+                    type: 'warning',
+                    title: '缺少行动导向',
+                    content: '建议明确下一步要做什么。使用行动词如 "启动""上线""拓展""优化" 开头'
+                });
+                score -= 10;
+            }
+
+            // ── 10. 篇幅检查（核心新增） ──
+
+            const noteLength = notes.length;
+            if (noteLength > 600) {
+                lengthIssues.push({
+                    type: 'error',
+                    title: `纪要过长（${noteLength} 字）`,
+                    content: `当前 ${noteLength} 字，建议控制在 500 字以内（约 iPhone 手机 3/4 屏）。微信群场景下，一屏读完的纪要阅读率最高。建议精简冗余表述或拆分为多条消息。`
+                });
+                score -= 15;
+            } else if (noteLength > 500) {
+                lengthIssues.push({
+                    type: 'warning',
+                    title: `纪要略长（${noteLength} 字）`,
+                    content: `当前 ${noteLength} 字，接近 500 字上限。建议检查是否有可精简的表述，确保在手机端一屏读完。`
+                });
+                score -= 5;
+            } else if (noteLength > 100) {
+                lengthIssues.push({
+                    type: 'success',
+                    title: `篇幅适中（${noteLength} 字）`,
+                    content: '长度在 500 字以内，适合微信群等手机端阅读场景。'
+                });
+            }
+
+            // ── 汇总评分 ──
+
+            score = Math.max(score, 10);
+            const allIssues = [...formatIssues, ...contentIssues, ...dataIssues, ...lengthIssues];
+
+            // 如果没有任何问题
+            if (allIssues.filter(i => i.type !== 'success').length === 0) {
+                allIssues.unshift({
                     type: 'success',
                     title: '写得很好！',
-                    content: '你的会议纪要符合核心要求：结构清晰、数据完整、行动明确。'
+                    content: '你的会议纪要符合核心要求：事实具体、数据完整、行动明确、篇幅适中。'
                 });
                 score = 95;
             }
@@ -1062,24 +1390,38 @@
                 scoreBadge.textContent = score + ' 分 · 需改进';
             }
 
-            // 渲染
+            // ── 分类渲染 ──
+
             let html = '';
-            suggestions.forEach(s => {
-                const iconMap = { success: '✓', warning: '!', error: '✗', info: 'i' };
-                html += `
-                    <div class="result-item ${s.type}">
-                        <div class="ri-icon">${iconMap[s.type] || 'i'}</div>
-                        <div class="ri-content">
-                            <h4>${s.title}</h4>
-                            <p>${s.content}</p>
-                        </div>
-                    </div>`;
-            });
+            const iconMap = { success: '✓', warning: '!', error: '✗', info: 'i' };
+
+            function renderCategory(title, items) {
+                if (items.length === 0) return '';
+                let out = `<div class="result-category">`;
+                out += `<div class="result-category-title">${title}</div>`;
+                items.forEach(s => {
+                    out += `
+                        <div class="result-item ${s.type}">
+                            <div class="ri-icon">${iconMap[s.type] || 'i'}</div>
+                            <div class="ri-content">
+                                <h4>${s.title}</h4>
+                                <p>${s.content}</p>
+                            </div>
+                        </div>`;
+                });
+                out += '</div>';
+                return out;
+            }
+
+            // 内容表述问题优先展示（用户最需要的）
+            html += renderCategory('📝 文字表述', contentIssues);
+            html += renderCategory('📊 数据与量化', dataIssues);
+            html += renderCategory('📐 格式与结构', formatIssues);
+            html += renderCategory('📏 篇幅控制', lengthIssues);
 
             suggestionsDiv.innerHTML = html;
             resultDiv.classList.add('show');
 
-            // 刷新 lucide 图标
             lucide.createIcons();
             resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
@@ -1091,7 +1433,6 @@
                 if (href.startsWith('#')) {
                     e.preventDefault();
                     document.querySelector(href)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    // 更新 active
                     document.querySelectorAll('.topbar-nav a').forEach(n => n.classList.remove('active'));
                     a.classList.add('active');
                 }
