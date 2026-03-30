@@ -3,360 +3,962 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>会议纪要撰写指南</title>
+    <title>会议纪要美化 & 指南</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
     <style>
-        * {
+        *, *::before, *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: #f5f5f5;
-            padding: 20px;
+        :root {
+            --bg: #fafbfc;
+            --surface: #ffffff;
+            --surface-hover: #f8f9fb;
+            --text: #1a1d26;
+            --text-secondary: #5f6577;
+            --text-muted: #9ca3b8;
+            --border: #e8eaef;
+            --border-light: #f0f1f5;
+            --accent: #2563eb;
+            --accent-light: #eff4ff;
+            --accent-dark: #1d4ed8;
+            --success: #059669;
+            --success-light: #ecfdf5;
+            --warning: #d97706;
+            --warning-light: #fffbeb;
+            --error: #dc2626;
+            --error-light: #fef2f2;
+            --radius: 12px;
+            --radius-sm: 8px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.06), 0 2px 4px rgba(0,0,0,0.04);
+            --shadow-lg: 0 12px 32px rgba(0,0,0,0.08), 0 4px 8px rgba(0,0,0,0.04);
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
+        body {
+            font-family: var(--font);
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--bg);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* === 顶部导航栏 === */
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(250, 251, 252, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-light);
+            padding: 0 24px;
+        }
+
+        .topbar-inner {
+            max-width: 960px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 56px;
+        }
+
+        .topbar-back {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9em;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .topbar-back:hover {
+            color: var(--accent);
+        }
+
+        .topbar-nav {
+            display: flex;
+            gap: 4px;
+        }
+
+        .topbar-nav a {
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .topbar-nav a:hover {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .topbar-nav a.active {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        /* === 主内容 === */
         .container {
-            max-width: 1000px;
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* === Hero 标题区 === */
+        .hero {
+            padding: 48px 0 40px;
+            text-align: center;
+        }
+
+        .hero-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #1e3a5f, #2563eb);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.2);
+        }
+
+        .hero-icon svg {
+            color: #fff;
+        }
+
+        .hero h1 {
+            font-size: 2.2em;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 10px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero p {
+            font-size: 1.05em;
+            color: var(--text-secondary);
+            max-width: 480px;
             margin: 0 auto;
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 40px 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-
-        .header p {
-            font-size: 1.1em;
-            opacity: 0.9;
-        }
-
+        /* === 分区通用 === */
         .section {
-            background: white;
-            padding: 30px;
-            margin-bottom: 30px;
-            border-radius: 12px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
         }
 
-        .section h2 {
-            color: #667eea;
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             margin-bottom: 20px;
-            font-size: 1.8em;
-            border-bottom: 3px solid #667eea;
-            padding-bottom: 10px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-light);
         }
 
-        .principle {
-            margin-bottom: 25px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-left: 4px solid #667eea;
-            border-radius: 8px;
-        }
-
-        .principle h3 {
-            color: #333;
+        .section-header h2 {
             font-size: 1.3em;
-            margin-bottom: 10px;
+            font-weight: 700;
+            color: var(--text);
         }
 
-        .principle ul {
-            margin-left: 20px;
-        }
-
-        .principle li {
-            margin-bottom: 8px;
-            color: #555;
-        }
-
-        .example-box {
-            background: #e7f3ff;
-            padding: 20px;
+        .section-icon {
+            width: 32px;
+            height: 32px;
             border-radius: 8px;
-            margin-top: 15px;
-            border-left: 4px solid #007bff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
         }
 
-        .example-box h4 {
-            color: #0056b3;
-            margin-bottom: 10px;
-            font-size: 1.1em;
+        .section-icon svg {
+            width: 18px;
+            height: 18px;
         }
 
-        .example-box p {
-            color: #333;
-            font-style: italic;
+        /* === 工具区 === */
+        .tool-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
         }
 
-        .tool-section {
-            margin-top: 40px;
+        .tool-desc {
+            color: var(--text-secondary);
+            font-size: 0.92em;
+            margin-bottom: 20px;
         }
 
         textarea {
             width: 100%;
-            min-height: 200px;
-            padding: 15px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-family: inherit;
-            font-size: 1em;
+            min-height: 180px;
+            padding: 16px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-family: var(--font);
+            font-size: 0.95em;
+            line-height: 1.7;
             resize: vertical;
-            margin-bottom: 20px;
+            transition: all 0.2s;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        textarea::placeholder {
+            color: var(--text-muted);
         }
 
         textarea:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            background: #fff;
         }
 
-        button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            font-size: 1.1em;
-            border-radius: 8px;
+        .tool-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 24px;
+            border-radius: var(--radius-sm);
+            font-family: var(--font);
+            font-size: 0.92em;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s;
+            border: none;
         }
 
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 1px 3px rgba(37, 99, 235, 0.3);
         }
 
+        .btn-primary:hover {
+            background: var(--accent-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: var(--surface);
+            color: var(--text-secondary);
+            border: 1.5px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--surface-hover);
+            color: var(--text);
+            border-color: #d0d5dd;
+        }
+
+        .char-count {
+            margin-left: auto;
+            font-size: 0.82em;
+            color: var(--text-muted);
+        }
+
+        /* === 分析结果 === */
         .result {
-            margin-top: 30px;
-            padding: 25px;
-            background: #f8f9fa;
-            border-radius: 8px;
+            margin-top: 24px;
             display: none;
         }
 
-        .result h3 {
-            color: #667eea;
-            margin-bottom: 15px;
-            font-size: 1.5em;
+        .result.show {
+            display: block;
+            animation: fadeInUp 0.35s ease-out;
         }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .result-header h3 {
+            font-size: 1.05em;
+            font-weight: 700;
+        }
+
+        .score-badge {
+            margin-left: auto;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.82em;
+            font-weight: 600;
+        }
+
+        .score-high { background: var(--success-light); color: var(--success); }
+        .score-mid { background: var(--warning-light); color: var(--warning); }
+        .score-low { background: var(--error-light); color: var(--error); }
 
         .result-item {
-            margin-bottom: 15px;
-            padding: 15px;
-            background: white;
-            border-radius: 6px;
-            border-left: 3px solid #28a745;
-        }
-
-        .result-item.warning {
-            border-left-color: #ffc107;
-        }
-
-        .result-item.error {
-            border-left-color: #dc3545;
-        }
-
-        .result-item h4 {
-            color: #333;
-            margin-bottom: 8px;
-            font-size: 1.1em;
-        }
-
-        .result-item p {
-            color: #666;
-            margin: 0;
-        }
-
-        .tips {
-            margin-top: 20px;
-            padding: 20px;
-            background: #fff3cd;
-            border-radius: 8px;
-            border-left: 4px solid #ffc107;
-        }
-
-        .tips h4 {
-            color: #856404;
+            padding: 14px 16px;
+            border-radius: var(--radius-sm);
             margin-bottom: 10px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
         }
 
-        .tips ul {
-            margin-left: 20px;
+        .result-item .ri-icon {
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 1px;
+            font-size: 12px;
         }
 
-        .tips li {
-            color: #856404;
-            margin-bottom: 5px;
+        .result-item.success { background: var(--success-light); }
+        .result-item.success .ri-icon { background: var(--success); color: #fff; }
+
+        .result-item.warning { background: var(--warning-light); }
+        .result-item.warning .ri-icon { background: var(--warning); color: #fff; }
+
+        .result-item.error { background: var(--error-light); }
+        .result-item.error .ri-icon { background: var(--error); color: #fff; }
+
+        .result-item.info { background: var(--accent-light); }
+        .result-item.info .ri-icon { background: var(--accent); color: #fff; }
+
+        .ri-content h4 {
+            font-size: 0.92em;
+            font-weight: 600;
+            margin-bottom: 3px;
         }
 
+        .ri-content p {
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* === 原则卡片 === */
+        .principles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .principle-card {
+            background: var(--surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            padding: 22px;
+            transition: all 0.25s;
+        }
+
+        .principle-card:hover {
+            border-color: var(--border);
+            box-shadow: var(--shadow-md);
+        }
+
+        .principle-num {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: var(--accent-light);
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.82em;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .principle-card h3 {
+            font-size: 1em;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        .principle-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .principle-card li {
+            font-size: 0.88em;
+            color: var(--text-secondary);
+            padding: 3px 0;
+            padding-left: 16px;
+            position: relative;
+        }
+
+        .principle-card li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 11px;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--accent);
+            opacity: 0.4;
+        }
+
+        .principle-example {
+            margin-top: 12px;
+            padding: 10px 14px;
+            background: var(--bg);
+            border-radius: var(--radius-sm);
+            border-left: 3px solid var(--accent);
+        }
+
+        .principle-example p {
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .principle-example .ex-label {
+            font-size: 0.75em;
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        /* === 案例区 === */
+        .cases-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .case-card {
+            background: var(--surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: all 0.25s;
+        }
+
+        .case-card:hover {
+            border-color: var(--border);
+            box-shadow: var(--shadow-md);
+        }
+
+        .case-header {
+            padding: 18px 22px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .case-num {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: var(--text);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.78em;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .case-header h3 {
+            font-size: 0.98em;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .case-annotation {
+            padding: 0 22px 16px;
+        }
+
+        .case-annotation p {
+            font-size: 0.88em;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            padding: 10px 14px;
+            background: var(--accent-light);
+            border-radius: var(--radius-sm);
+            border-left: 3px solid var(--accent);
+        }
+
+        .case-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .case-before, .case-after {
+            padding: 18px 22px;
+        }
+
+        .case-before {
+            background: #fafafa;
+            border-right: 1px solid var(--border-light);
+        }
+
+        .case-after {
+            background: var(--success-light);
+        }
+
+        .case-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.75em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .case-before .case-label {
+            color: var(--text-muted);
+        }
+
+        .case-after .case-label {
+            color: var(--success);
+        }
+
+        .case-text {
+            font-size: 0.9em;
+            line-height: 1.7;
+            color: var(--text);
+        }
+
+        .case-before .case-text {
+            color: var(--text-secondary);
+        }
+
+        .case-highlight {
+            background: rgba(5, 150, 105, 0.1);
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-weight: 500;
+        }
+
+        /* === 技巧区 === */
+        .tips-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .tips-card {
+            background: var(--surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius);
+            padding: 22px;
+        }
+
+        .tips-card h3 {
+            font-size: 0.95em;
+            font-weight: 700;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tips-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tips-card li {
+            font-size: 0.88em;
+            color: var(--text-secondary);
+            padding: 5px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .tips-avoid li::before {
+            content: '×';
+            position: absolute;
+            left: 0;
+            color: var(--error);
+            font-weight: 700;
+            font-size: 1em;
+        }
+
+        .tips-do li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-weight: 700;
+            font-size: 0.9em;
+        }
+
+        /* === 底部 === */
+        .footer {
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 20px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .footer-quote {
+            font-size: 0.95em;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-bottom: 12px;
+        }
+
+        .footer-credit {
+            font-size: 0.82em;
+            color: var(--text-muted);
+        }
+
+        .footer-credit a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .footer-credit a:hover {
+            text-decoration: underline;
+        }
+
+        /* === 响应式 === */
         @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
-
-            .header h1 {
-                font-size: 1.8em;
-            }
-
-            .section {
-                padding: 20px;
-            }
+            .container { padding: 0 16px; }
+            .hero { padding: 32px 0 28px; }
+            .hero h1 { font-size: 1.6em; }
+            .principles-grid { grid-template-columns: 1fr; }
+            .tips-grid { grid-template-columns: 1fr; }
+            .case-comparison { grid-template-columns: 1fr; }
+            .case-before { border-right: none; border-bottom: 1px solid var(--border-light); }
+            .topbar-nav { display: none; }
         }
     </style>
 </head>
 <body>
+    <!-- 顶部导航 -->
+    <div class="topbar">
+        <div class="topbar-inner">
+            <a href="../" class="topbar-back">
+                <i data-lucide="arrow-left" style="width:16px;height:16px;"></i>
+                Ad Workflow
+            </a>
+            <nav class="topbar-nav">
+                <a href="#tool" class="active">纪要工具</a>
+                <a href="#principles">撰写原则</a>
+                <a href="#cases">案例参考</a>
+                <a href="#tips">技巧速查</a>
+            </nav>
+        </div>
+    </div>
+
     <div class="container">
-        <div class="header">
-            <h1>会议纪要撰写指南</h1>
+        <!-- Hero -->
+        <div class="hero">
+            <div class="hero-icon">
+                <i data-lucide="file-pen" style="width:30px;height:30px;"></i>
+            </div>
+            <h1>会议纪要美化 & 指南</h1>
             <p>让你的会议纪要更专业、更清晰、更有行动力</p>
         </div>
 
-        <div class="section">
-            <h2>核心原则</h2>
-
-            <div class="principle">
-                <h3>1. 结论先行，数据支撑</h3>
-                <ul>
-                    <li>先说目标/结果，再说背景/原因</li>
-                    <li>关键结论必须有具体数据支撑</li>
-                    <li>使用对比增强说服力（环比、同比、竞品对比）</li>
-                </ul>
-                <div class="example-box">
-                    <h4>✅ 好的例子</h4>
-                    <p>收入：Q1完成1200万/完成率98%；Q2目标1800万，环比+50%/同比+21%</p>
+        <!-- 工具区 — 放最前面 -->
+        <div class="section" id="tool">
+            <div class="section-header">
+                <div class="section-icon" style="background:var(--accent-light);color:var(--accent);">
+                    <i data-lucide="sparkles"></i>
                 </div>
+                <h2>纪要美化工具</h2>
             </div>
-
-            <div class="principle">
-                <h3>2. 极简精炼，去除废话</h3>
-                <ul>
-                    <li>每点控制在2-3句话</li>
-                    <li>去掉"今天"、"我们讨论了"等冗余表述</li>
-                    <li>直接说做了什么、为什么、下一步做什么</li>
-                </ul>
-                <div class="example-box">
-                    <h4>✅ 好的例子</h4>
-                    <p>Q2重点拓展"虎牙/起点/狗概"等腰部媒体</p>
+            <div class="tool-card">
+                <p class="tool-desc">粘贴你的会议纪要，基于 5 大核心原则快速获取改进建议。所有分析在浏览器本地完成，内容不会上传。</p>
+                <textarea id="meetingNotes" placeholder="在这里粘贴你的会议纪要内容…&#10;&#10;例如：&#10;1、收入情况：Q1完成1200万...&#10;2、重点进展：…"></textarea>
+                <div class="tool-actions">
+                    <button class="btn btn-primary" onclick="analyzeNotes()">
+                        <i data-lucide="scan-search" style="width:16px;height:16px;"></i>
+                        获取改进建议
+                    </button>
+                    <button class="btn btn-secondary" onclick="clearNotes()">
+                        <i data-lucide="eraser" style="width:16px;height:16px;"></i>
+                        清空
+                    </button>
+                    <span class="char-count" id="charCount">0 字</span>
                 </div>
-            </div>
-
-            <div class="principle">
-                <h3>3. 结构清晰，逻辑分明</h3>
-                <ul>
-                    <li>使用"1、2、3"或"一、二、三"分层编号</li>
-                    <li>每点聚焦一个核心主题，不混用</li>
-                    <li>先总结现状，再讲问题，最后给计划</li>
-                </ul>
-                <div class="example-box">
-                    <h4>✅ 好的例子</h4>
-                    <p>1、收入情况；2、重点进展和瓶颈；3、重点计划</p>
+                <div id="result" class="result">
+                    <div class="result-header">
+                        <i data-lucide="clipboard-check" style="width:20px;height:20px;color:var(--accent);"></i>
+                        <h3>分析结果</h3>
+                        <span id="scoreBadge" class="score-badge"></span>
+                    </div>
+                    <div id="suggestions"></div>
                 </div>
-            </div>
-
-            <div class="principle">
-                <h3>4. 行动导向，明确下一步</h3>
-                <ul>
-                    <li>明确责任人和时间节点</li>
-                    <li>指出具体要做的事情</li>
-                    <li>区分"已做"、"在做"、"待做"</li>
-                </ul>
-                <div class="example-box">
-                    <h4>✅ 好的例子</h4>
-                    <p>本周四已启动；PC试玩Q2上线</p>
-                </div>
-            </div>
-
-            <div class="principle">
-                <h3>5. 受众适配，调整视角</h3>
-                <ul>
-                    <li>给领导：突出目标和挑战</li>
-                    <li>给平级/跨团队：突出行动和协同</li>
-                    <li>给下属：突出要求和时间</li>
-                </ul>
             </div>
         </div>
 
-        <div class="section tool-section">
-            <h2>📝 智能改进建议</h2>
-            <p style="margin-bottom: 20px; color: #666;">粘贴你的会议纪要，我会基于以上原则给出改进建议</p>
+        <!-- 核心原则 -->
+        <div class="section" id="principles">
+            <div class="section-header">
+                <div class="section-icon" style="background:var(--accent-light);color:var(--accent);">
+                    <i data-lucide="book-open-text"></i>
+                </div>
+                <h2>5 大核心原则</h2>
+            </div>
+            <div class="principles-grid">
+                <div class="principle-card">
+                    <div class="principle-num">1</div>
+                    <h3>结论先行，数据支撑</h3>
+                    <ul>
+                        <li>先说目标/结果，再说背景/原因</li>
+                        <li>关键结论必须有具体数据支撑</li>
+                        <li>使用对比增强说服力（环比、同比、竞品对比）</li>
+                    </ul>
+                    <div class="principle-example">
+                        <div class="ex-label">✅ 好的示范</div>
+                        <p>收入：Q1完成1200万/完成率98%；Q2目标1800万，环比+50%/同比+21%</p>
+                    </div>
+                </div>
 
-            <textarea id="meetingNotes" placeholder="请粘贴你的会议纪要..."></textarea>
+                <div class="principle-card">
+                    <div class="principle-num">2</div>
+                    <h3>极简精炼，去除废话</h3>
+                    <ul>
+                        <li>每点控制在 2-3 句话</li>
+                        <li>去掉"今天"、"我们讨论了"等冗余表述</li>
+                        <li>直接说做了什么、为什么、下一步做什么</li>
+                    </ul>
+                    <div class="principle-example">
+                        <div class="ex-label">✅ 好的示范</div>
+                        <p>Q2重点拓展"虎牙/起点/狗概"等腰部媒体</p>
+                    </div>
+                </div>
 
-            <button onclick="analyzeNotes()">获取改进建议</button>
+                <div class="principle-card">
+                    <div class="principle-num">3</div>
+                    <h3>结构清晰，逻辑分明</h3>
+                    <ul>
+                        <li>使用"1、2、3"或"一、二、三"分层编号</li>
+                        <li>每点聚焦一个核心主题，不混用</li>
+                        <li>先总结现状，再讲问题，最后给计划</li>
+                    </ul>
+                    <div class="principle-example">
+                        <div class="ex-label">✅ 好的示范</div>
+                        <p>1、收入情况；2、重点进展和瓶颈；3、重点计划</p>
+                    </div>
+                </div>
 
-            <div id="result" class="result">
-                <h3>改进建议</h3>
-                <div id="suggestions"></div>
+                <div class="principle-card">
+                    <div class="principle-num">4</div>
+                    <h3>行动导向，明确下一步</h3>
+                    <ul>
+                        <li>明确责任人和时间节点</li>
+                        <li>指出具体要做的事情</li>
+                        <li>区分"已做"、"在做"、"待做"</li>
+                    </ul>
+                    <div class="principle-example">
+                        <div class="ex-label">✅ 好的示范</div>
+                        <p>本周四已启动；PC试玩Q2上线</p>
+                    </div>
+                </div>
+
+                <div class="principle-card">
+                    <div class="principle-num">5</div>
+                    <h3>受众适配，调整视角</h3>
+                    <ul>
+                        <li>给领导：突出目标和挑战</li>
+                        <li>给平级/跨团队：突出行动和协同</li>
+                        <li>给下属：突出要求和时间</li>
+                    </ul>
+                </div>
             </div>
         </div>
 
-        <div class="section">
-            <h2>常见问题与技巧</h2>
-
-            <div class="tips">
-                <h4>❌ 避免这些错误</h4>
-                <ul>
-                    <li>流水账式的记录，没有提炼重点</li>
-                    <li>缺少数据支撑，全是定性描述</li>
-                    <li>结构混乱，信息混杂</li>
-                    <li>没有明确下一步行动</li>
-                    <li>过于冗长，读者难以快速获取关键信息</li>
-                </ul>
+        <!-- 实战案例 -->
+        <div class="section" id="cases">
+            <div class="section-header">
+                <div class="section-icon" style="background:var(--success-light);color:var(--success);">
+                    <i data-lucide="git-compare-arrows"></i>
+                </div>
+                <h2>实战案例：修改前 vs 修改后</h2>
             </div>
 
-            <div class="tips" style="background: #d4edda; border-left-color: #28a745; margin-top: 20px;">
-                <h4 style="color: #155724;">✅ 掌握这些技巧</h4>
-                <ul>
-                    <li>先快速浏览，提炼3-5个核心要点</li>
-                    <li>每个要点先写结论，再补充背景</li>
-                    <li>用数据说话，避免"很多"、"显著"等模糊词</li>
-                    <li>检查是否有明确的时间节点和责任人</li>
-                    <li>站在读者角度：他们最关心什么？</li>
-                </ul>
+            <div class="cases-list">
+                <!-- 案例1 -->
+                <div class="case-card">
+                    <div class="case-header">
+                        <div class="case-num">1</div>
+                        <h3>关于平台侧的财报披露变化</h3>
+                    </div>
+                    <div class="case-annotation">
+                        <p>📝 <strong>批注：</strong>修改前的信息没有分层，修改后的版本既考虑到"新增披露"也考虑到"不再披露"，更加突出广告侧的高目标和挑战。</p>
+                    </div>
+                    <div class="case-comparison">
+                        <div class="case-before">
+                            <div class="case-label">
+                                <i data-lucide="x-circle" style="width:13px;height:13px;color:var(--text-muted);"></i>
+                                修改前
+                            </div>
+                            <div class="case-text">Q2平台侧有几个变化，Q2财报计划披露广告增速和绝对值。</div>
+                        </div>
+                        <div class="case-after">
+                            <div class="case-label">
+                                <i data-lucide="check-circle-2" style="width:13px;height:13px;color:var(--success);"></i>
+                                修改后
+                            </div>
+                            <div class="case-text">财报变化，<span class="case-highlight">①新增披露</span>：单独披露广告收入，Q2广告同比要求>xx%；<span class="case-highlight">不再披露</span>：不再披露会员规模和ARPU（收入仍披露）。</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 案例2 -->
+                <div class="case-card">
+                    <div class="case-header">
+                        <div class="case-num">2</div>
+                        <h3>关于业务进展的表述</h3>
+                    </div>
+                    <div class="case-annotation">
+                        <p>📝 <strong>批注：</strong>修改前没有突出效果挑战，看起来像常规进展；修改后讲出了广告收入下的效果挑战，同时也讲出了优化目标（做好留存和后效），表达要挖掘头客潜力（与会议上平台侧老板提出的方向呼应）。</p>
+                    </div>
+                    <div class="case-comparison">
+                        <div class="case-before">
+                            <div class="case-label">
+                                <i data-lucide="x-circle" style="width:13px;height:13px;color:var(--text-muted);"></i>
+                                修改前
+                            </div>
+                            <div class="case-text">网赚，聚焦行业专区的效果优化&酷狗提效，争取多做</div>
+                        </div>
+                        <div class="case-after">
+                            <div class="case-label">
+                                <i data-lucide="check-circle-2" style="width:13px;height:13px;color:var(--success);"></i>
+                                修改后
+                            </div>
+                            <div class="case-text">网赚，<span class="case-highlight">下载专区后效承压</span>，优化留存&后效如prompt率；<span class="case-highlight">挖掘头客潜力</span>。</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="section" style="text-align: center; color: #666;">
-            <p>💡 记住：好的会议纪要不是记录"发生了什么"，而是提炼"意味着什么"和"要做什么"</p>
+        <!-- 技巧速查 -->
+        <div class="section" id="tips">
+            <div class="section-header">
+                <div class="section-icon" style="background:var(--warning-light);color:var(--warning);">
+                    <i data-lucide="lightbulb"></i>
+                </div>
+                <h2>技巧速查</h2>
+            </div>
+            <div class="tips-grid">
+                <div class="tips-card tips-avoid">
+                    <h3>
+                        <span style="color:var(--error);">❌</span>
+                        避免这些错误
+                    </h3>
+                    <ul>
+                        <li>流水账式记录，没有提炼重点</li>
+                        <li>缺少数据支撑，全是定性描述</li>
+                        <li>结构混乱，信息混杂</li>
+                        <li>没有明确下一步行动</li>
+                        <li>过于冗长，难以快速获取关键信息</li>
+                    </ul>
+                </div>
+                <div class="tips-card tips-do">
+                    <h3>
+                        <span style="color:var(--success);">✅</span>
+                        掌握这些技巧
+                    </h3>
+                    <ul>
+                        <li>先快速浏览，提炼 3-5 个核心要点</li>
+                        <li>每个要点先写结论，再补充背景</li>
+                        <li>用数据说话，避免"很多"、"显著"等模糊词</li>
+                        <li>检查是否有明确的时间节点和责任人</li>
+                        <li>站在读者角度：他们最关心什么？</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部 -->
+        <div class="footer">
+            <p class="footer-quote">💡 好的会议纪要不是记录"发生了什么"，而是提炼"意味着什么"和"要做什么"</p>
+            <p class="footer-credit"><a href="../">Ad Workflow</a> · 让商业化工作更高效</p>
         </div>
     </div>
 
     <script>
+        // 初始化 Lucide 图标
+        lucide.createIcons();
+
+        // 字数统计
+        const textarea = document.getElementById('meetingNotes');
+        const charCount = document.getElementById('charCount');
+        textarea.addEventListener('input', () => {
+            charCount.textContent = textarea.value.length + ' 字';
+        });
+
+        function clearNotes() {
+            textarea.value = '';
+            charCount.textContent = '0 字';
+            document.getElementById('result').classList.remove('show');
+        }
+
         function analyzeNotes() {
-            const notes = document.getElementById('meetingNotes').value.trim();
+            const notes = textarea.value.trim();
             const resultDiv = document.getElementById('result');
             const suggestionsDiv = document.getElementById('suggestions');
+            const scoreBadge = document.getElementById('scoreBadge');
 
             if (!notes) {
-                alert('请先输入会议纪要内容');
+                textarea.focus();
+                textarea.style.borderColor = 'var(--error)';
+                setTimeout(() => textarea.style.borderColor = '', 1500);
                 return;
             }
 
             let suggestions = [];
+            let score = 100;
             const lines = notes.split('\n').filter(line => line.trim());
 
             // 检查是否有标题
-            if (!notes.includes('纪要') && !notes.includes('同步') && lines.length > 0) {
+            if (!notes.includes('纪要') && !notes.includes('同步') && !notes.includes('沟通') && !notes.includes('会议') && lines.length > 0) {
                 suggestions.push({
                     type: 'warning',
                     title: '缺少标题',
                     content: '建议在开头添加一句话标题，格式如："同步XX会议纪要"或"关于XX的沟通纪要"'
                 });
+                score -= 15;
             }
 
             // 检查是否使用数据
@@ -367,6 +969,7 @@
                     title: '缺少数据支撑',
                     content: '建议在关键结论中加入具体数据，如收入、完成率、增长率等，增强说服力'
                 });
+                score -= 20;
             }
 
             // 检查是否过于冗长
@@ -375,86 +978,139 @@
                 suggestions.push({
                     type: 'info',
                     title: '建议精炼表达',
-                    content: `发现${longLines.length}行过于冗长（超过100字），建议拆分成多条或精简表述，每点控制在2-3句话`
+                    content: `发现 ${longLines.length} 行过于冗长（超过100字），建议拆分成多条或精简表述，每点控制在2-3句话`
                 });
+                score -= 10;
             }
 
             // 检查是否有时间节点
-            const hasTime = /本周|Q[1-4]|H[12]|月|日|已启动|Q[1-4]上线/.test(notes);
+            const hasTime = /本周|下周|Q[1-4]|H[12]|月底|月|日|已启动|上线|截止/.test(notes);
             if (!hasTime && lines.length > 2) {
                 suggestions.push({
                     type: 'warning',
                     title: '缺少时间节点',
                     content: '建议明确下一步行动的时间节点，如"本周启动"、"Q2上线"等'
                 });
+                score -= 15;
             }
 
             // 检查是否使用对比
-            const hasComparison = /环比|同比|vs|对比/.test(notes);
+            const hasComparison = /环比|同比|vs|对比|较/.test(notes);
             if (!hasComparison && hasNumbers && lines.length > 3) {
                 suggestions.push({
                     type: 'info',
-                    title: '可增加对比',
+                    title: '可增加对比维度',
                     content: '建议加入环比、同比或竞品对比，让数据更有说服力'
                 });
+                score -= 8;
             }
 
             // 检查结构
-            const hasStructure = lines.some(line => /^\d+[、.]|一、|二、|三、/.test(line));
+            const hasStructure = lines.some(line => /^\d+[、.）)]|^[一二三四五六七八九十]+、|^[-•]/.test(line.trim()));
             if (!hasStructure && lines.length > 5) {
                 suggestions.push({
                     type: 'warning',
                     title: '结构不够清晰',
                     content: '建议使用"1、2、3"或"一、二、三"进行分点编号，让结构更清晰'
                 });
+                score -= 15;
             }
 
             // 检查是否有行动导向
-            const hasAction = /启动|上线|拓展|优化|提升|建设|对接|落地/.test(notes);
+            const hasAction = /启动|上线|拓展|优化|提升|建设|对接|落地|推进|挖掘|聚焦/.test(notes);
             if (!hasAction && lines.length > 2) {
                 suggestions.push({
                     type: 'warning',
                     title: '缺少行动导向',
-                    content: '建议明确下一步要做什么，使用行动词汇如"启动"、"上线"、"拓展"等'
+                    content: '建议明确下一步要做什么，使用行动词汇如"启动"、"上线"、"拓展"、"优化"等'
                 });
+                score -= 15;
             }
 
             // 检查是否过于口语化
-            const informalWords = /我们大家|大家一起|我们讨论了|我们觉得|我觉得/.test(notes);
+            const informalWords = notes.match(/我们大家|大家一起|我们讨论了|我们觉得|我觉得|今天开会/g);
             if (informalWords) {
                 suggestions.push({
                     type: 'info',
                     title: '建议去除口语化表达',
-                    content: '去掉"我们讨论了"、"我们觉得"等冗余表述，直接陈述事实和结论'
+                    content: `发现口语化表达（${informalWords.join('、')}），建议去除冗余表述，直接陈述事实和结论`
                 });
+                score -= 8;
             }
 
-            // 如果没有问题
+            // 分数
+            score = Math.max(score, 20);
+
             if (suggestions.length === 0) {
                 suggestions.push({
                     type: 'success',
                     title: '写得很好！',
-                    content: '你的会议纪要已经符合核心要求，结构清晰、数据完整、行动明确。'
+                    content: '你的会议纪要符合核心要求：结构清晰、数据完整、行动明确。'
                 });
+                score = 95;
             }
 
-            // 渲染建议
+            // 评分标签
+            if (score >= 80) {
+                scoreBadge.className = 'score-badge score-high';
+                scoreBadge.textContent = score + ' 分 · 优秀';
+            } else if (score >= 60) {
+                scoreBadge.className = 'score-badge score-mid';
+                scoreBadge.textContent = score + ' 分 · 良好';
+            } else {
+                scoreBadge.className = 'score-badge score-low';
+                scoreBadge.textContent = score + ' 分 · 需改进';
+            }
+
+            // 渲染
             let html = '';
             suggestions.forEach(s => {
+                const iconMap = { success: '✓', warning: '!', error: '✗', info: 'i' };
                 html += `
                     <div class="result-item ${s.type}">
-                        <h4>${s.type === 'success' ? '🎉 ' : '💡 '}${s.title}</h4>
-                        <p>${s.content}</p>
-                    </div>
-                `;
+                        <div class="ri-icon">${iconMap[s.type] || 'i'}</div>
+                        <div class="ri-content">
+                            <h4>${s.title}</h4>
+                            <p>${s.content}</p>
+                        </div>
+                    </div>`;
             });
 
             suggestionsDiv.innerHTML = html;
-            resultDiv.style.display = 'block';
+            resultDiv.classList.add('show');
 
-            // 滚动到结果区域
+            // 刷新 lucide 图标
+            lucide.createIcons();
             resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
+
+        // 平滑滚动锚点
+        document.querySelectorAll('.topbar-nav a').forEach(a => {
+            a.addEventListener('click', e => {
+                const href = a.getAttribute('href');
+                if (href.startsWith('#')) {
+                    e.preventDefault();
+                    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // 更新 active
+                    document.querySelectorAll('.topbar-nav a').forEach(n => n.classList.remove('active'));
+                    a.classList.add('active');
+                }
+            });
+        });
+
+        // 滚动监听 active 状态
+        const sections = ['tool', 'principles', 'cases', 'tips'];
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY + 80;
+            let current = sections[0];
+            sections.forEach(id => {
+                const el = document.getElementById(id);
+                if (el && el.offsetTop <= scrollY) current = id;
+            });
+            document.querySelectorAll('.topbar-nav a').forEach(a => {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+            });
+        });
     </script>
 </body>
 </html>
