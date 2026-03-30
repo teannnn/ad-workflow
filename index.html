@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>会议纪要撰写指南</title>
+    <title>广告商业化工作流</title>
     <style>
         * {
             margin: 0;
@@ -15,206 +15,153 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.6;
             color: #333;
-            background: #f5f5f5;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             padding: 20px;
         }
 
         .container {
-            max-width: 1000px;
-            margin: 0 auto;
+            max-width: 900px;
+            width: 100%;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 40px;
-            padding: 40px 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 50px;
+            color: #fff;
         }
 
         .header h1 {
             font-size: 2.5em;
-            margin-bottom: 10px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.15);
         }
 
         .header p {
-            font-size: 1.1em;
+            font-size: 1.15em;
             opacity: 0.9;
         }
 
-        .section {
-            background: white;
-            padding: 30px;
-            margin-bottom: 30px;
-            border-radius: 12px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
         }
 
-        .section h2 {
-            color: #667eea;
-            margin-bottom: 20px;
-            font-size: 1.8em;
-            border-bottom: 3px solid #667eea;
-            padding-bottom: 10px;
-        }
-
-        .principle {
-            margin-bottom: 25px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-left: 4px solid #667eea;
-            border-radius: 8px;
-        }
-
-        .principle h3 {
-            color: #333;
-            font-size: 1.3em;
-            margin-bottom: 10px;
-        }
-
-        .principle ul {
-            margin-left: 20px;
-        }
-
-        .principle li {
-            margin-bottom: 8px;
-            color: #555;
-        }
-
-        .example-box {
-            background: #e7f3ff;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 15px;
-            border-left: 4px solid #007bff;
-        }
-
-        .example-box h4 {
-            color: #0056b3;
-            margin-bottom: 10px;
-            font-size: 1.1em;
-        }
-
-        .example-box p {
-            color: #333;
-            font-style: italic;
-        }
-
-        .tool-section {
-            margin-top: 40px;
-        }
-
-        textarea {
-            width: 100%;
-            min-height: 200px;
-            padding: 15px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-family: inherit;
-            font-size: 1em;
-            resize: vertical;
-            margin-bottom: 20px;
-        }
-
-        textarea:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            font-size: 1.1em;
-            border-radius: 8px;
-            cursor: pointer;
+        .project-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 32px 28px;
+            text-decoration: none;
+            color: inherit;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
         }
 
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 16px 16px 0 0;
         }
 
-        .result {
-            margin-top: 30px;
-            padding: 25px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            display: none;
+        .project-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 36px rgba(0,0,0,0.18);
         }
 
-        .result h3 {
-            color: #667eea;
-            margin-bottom: 15px;
-            font-size: 1.5em;
+        .project-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 20px;
         }
 
-        .result-item {
-            margin-bottom: 15px;
-            padding: 15px;
-            background: white;
-            border-radius: 6px;
-            border-left: 3px solid #28a745;
-        }
-
-        .result-item.warning {
-            border-left-color: #ffc107;
-        }
-
-        .result-item.error {
-            border-left-color: #dc3545;
-        }
-
-        .result-item h4 {
-            color: #333;
-            margin-bottom: 8px;
-            font-size: 1.1em;
-        }
-
-        .result-item p {
-            color: #666;
-            margin: 0;
-        }
-
-        .tips {
-            margin-top: 20px;
-            padding: 20px;
-            background: #fff3cd;
-            border-radius: 8px;
-            border-left: 4px solid #ffc107;
-        }
-
-        .tips h4 {
-            color: #856404;
+        .project-card h3 {
+            font-size: 1.3em;
+            font-weight: 600;
             margin-bottom: 10px;
+            color: #1a1a2e;
         }
 
-        .tips ul {
-            margin-left: 20px;
+        .project-card p {
+            font-size: 0.95em;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 16px;
         }
 
-        .tips li {
-            color: #856404;
-            margin-bottom: 5px;
+        .project-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 500;
         }
 
-        @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
+        .tag-active {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
 
+        .tag-coming {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+
+        /* meeting-notes 专属配色 */
+        .icon-meeting {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+        }
+
+        /* 占位卡片样式 */
+        .project-card.coming-soon {
+            opacity: 0.7;
+            cursor: default;
+        }
+
+        .project-card.coming-soon:hover {
+            transform: none;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .project-card.coming-soon::before {
+            background: linear-gradient(90deg, #bbb, #ddd);
+        }
+
+        .icon-placeholder {
+            background: #eee;
+            color: #aaa;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 600px) {
             .header h1 {
                 font-size: 1.8em;
             }
-
-            .section {
-                padding: 20px;
+            .projects-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -222,239 +169,31 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>会议纪要撰写指南</h1>
-            <p>让你的会议纪要更专业、更清晰、更有行动力</p>
+            <h1>广告商业化工作流</h1>
+            <p>团队效率工具集 · Ad Workflow Toolkit</p>
         </div>
 
-        <div class="section">
-            <h2>核心原则</h2>
+        <div class="projects-grid">
+            <!-- 会议纪要 -->
+            <a href="meeting-notes/" class="project-card">
+                <div class="project-icon icon-meeting">📋</div>
+                <h3>会议纪要撰写指南</h3>
+                <p>基于实战经验提炼的会议纪要方法论，支持输入纪要获取智能改进建议。</p>
+                <span class="project-tag tag-active">已上线</span>
+            </a>
 
-            <div class="principle">
-                <h3>1. 结论先行，数据支撑</h3>
-                <ul>
-                    <li>先说目标/结果，再说背景/原因</li>
-                    <li>关键结论必须有具体数据支撑</li>
-                    <li>使用对比增强说服力（环比、同比、竞品对比）</li>
-                </ul>
-                <div class="example-box">
-                    <h4>✅ 好的例子</h4>
-                    <p>收入：Q1完成1200万/完成率98%；Q2目标1800万，环比+50%/同比+21%</p>
-                </div>
-            </div>
-
-            <div class="principle">
-                <h3>2. 极简精炼，去除废话</h3>
-                <ul>
-                    <li>每点控制在2-3句话</li>
-                    <li>去掉"今天"、"我们讨论了"等冗余表述</li>
-                    <li>直接说做了什么、为什么、下一步做什么</li>
-                </ul>
-                <div class="example-box">
-                    <h4>✅ 好的例子</h4>
-                    <p>Q2重点拓展"虎牙/起点/狗概"等腰部媒体</p>
-                </div>
-            </div>
-
-            <div class="principle">
-                <h3>3. 结构清晰，逻辑分明</h3>
-                <ul>
-                    <li>使用"1、2、3"或"一、二、三"分层编号</li>
-                    <li>每点聚焦一个核心主题，不混用</li>
-                    <li>先总结现状，再讲问题，最后给计划</li>
-                </ul>
-                <div class="example-box">
-                    <h4>✅ 好的例子</h4>
-                    <p>1、收入情况；2、重点进展和瓶颈；3、重点计划</p>
-                </div>
-            </div>
-
-            <div class="principle">
-                <h3>4. 行动导向，明确下一步</h3>
-                <ul>
-                    <li>明确责任人和时间节点</li>
-                    <li>指出具体要做的事情</li>
-                    <li>区分"已做"、"在做"、"待做"</li>
-                </ul>
-                <div class="example-box">
-                    <h4>✅ 好的例子</h4>
-                    <p>本周四已启动；PC试玩Q2上线</p>
-                </div>
-            </div>
-
-            <div class="principle">
-                <h3>5. 受众适配，调整视角</h3>
-                <ul>
-                    <li>给领导：突出目标和挑战</li>
-                    <li>给平级/跨团队：突出行动和协同</li>
-                    <li>给下属：突出要求和时间</li>
-                </ul>
+            <!-- 更多项目占位 -->
+            <div class="project-card coming-soon">
+                <div class="project-icon icon-placeholder">✨</div>
+                <h3>更多工具即将上线</h3>
+                <p>数据分析模板、周报生成器、竞品追踪看板……敬请期待。</p>
+                <span class="project-tag tag-coming">规划中</span>
             </div>
         </div>
 
-        <div class="section tool-section">
-            <h2>📝 智能改进建议</h2>
-            <p style="margin-bottom: 20px; color: #666;">粘贴你的会议纪要，我会基于以上原则给出改进建议</p>
-
-            <textarea id="meetingNotes" placeholder="请粘贴你的会议纪要..."></textarea>
-
-            <button onclick="analyzeNotes()">获取改进建议</button>
-
-            <div id="result" class="result">
-                <h3>改进建议</h3>
-                <div id="suggestions"></div>
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>常见问题与技巧</h2>
-
-            <div class="tips">
-                <h4>❌ 避免这些错误</h4>
-                <ul>
-                    <li>流水账式的记录，没有提炼重点</li>
-                    <li>缺少数据支撑，全是定性描述</li>
-                    <li>结构混乱，信息混杂</li>
-                    <li>没有明确下一步行动</li>
-                    <li>过于冗长，读者难以快速获取关键信息</li>
-                </ul>
-            </div>
-
-            <div class="tips" style="background: #d4edda; border-left-color: #28a745; margin-top: 20px;">
-                <h4 style="color: #155724;">✅ 掌握这些技巧</h4>
-                <ul>
-                    <li>先快速浏览，提炼3-5个核心要点</li>
-                    <li>每个要点先写结论，再补充背景</li>
-                    <li>用数据说话，避免"很多"、"显著"等模糊词</li>
-                    <li>检查是否有明确的时间节点和责任人</li>
-                    <li>站在读者角度：他们最关心什么？</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="section" style="text-align: center; color: #666;">
-            <p>💡 记住：好的会议纪要不是记录"发生了什么"，而是提炼"意味着什么"和"要做什么"</p>
+        <div class="footer">
+            <p>Ad Workflow · 让商业化工作更高效</p>
         </div>
     </div>
-
-    <script>
-        function analyzeNotes() {
-            const notes = document.getElementById('meetingNotes').value.trim();
-            const resultDiv = document.getElementById('result');
-            const suggestionsDiv = document.getElementById('suggestions');
-
-            if (!notes) {
-                alert('请先输入会议纪要内容');
-                return;
-            }
-
-            let suggestions = [];
-            const lines = notes.split('\n').filter(line => line.trim());
-
-            // 检查是否有标题
-            if (!notes.includes('纪要') && !notes.includes('同步') && lines.length > 0) {
-                suggestions.push({
-                    type: 'warning',
-                    title: '缺少标题',
-                    content: '建议在开头添加一句话标题，格式如："同步XX会议纪要"或"关于XX的沟通纪要"'
-                });
-            }
-
-            // 检查是否使用数据
-            const hasNumbers = /\d+万|\d+%|\d+\.\d+|\d+月|\d+日/.test(notes);
-            if (!hasNumbers && lines.length > 3) {
-                suggestions.push({
-                    type: 'warning',
-                    title: '缺少数据支撑',
-                    content: '建议在关键结论中加入具体数据，如收入、完成率、增长率等，增强说服力'
-                });
-            }
-
-            // 检查是否过于冗长
-            const longLines = lines.filter(line => line.length > 100);
-            if (longLines.length > 0) {
-                suggestions.push({
-                    type: 'info',
-                    title: '建议精炼表达',
-                    content: `发现${longLines.length}行过于冗长（超过100字），建议拆分成多条或精简表述，每点控制在2-3句话`
-                });
-            }
-
-            // 检查是否有时间节点
-            const hasTime = /本周|Q[1-4]|H[12]|月|日|已启动|Q[1-4]上线/.test(notes);
-            if (!hasTime && lines.length > 2) {
-                suggestions.push({
-                    type: 'warning',
-                    title: '缺少时间节点',
-                    content: '建议明确下一步行动的时间节点，如"本周启动"、"Q2上线"等'
-                });
-            }
-
-            // 检查是否使用对比
-            const hasComparison = /环比|同比|vs|对比/.test(notes);
-            if (!hasComparison && hasNumbers && lines.length > 3) {
-                suggestions.push({
-                    type: 'info',
-                    title: '可增加对比',
-                    content: '建议加入环比、同比或竞品对比，让数据更有说服力'
-                });
-            }
-
-            // 检查结构
-            const hasStructure = lines.some(line => /^\d+[、.]|一、|二、|三、/.test(line));
-            if (!hasStructure && lines.length > 5) {
-                suggestions.push({
-                    type: 'warning',
-                    title: '结构不够清晰',
-                    content: '建议使用"1、2、3"或"一、二、三"进行分点编号，让结构更清晰'
-                });
-            }
-
-            // 检查是否有行动导向
-            const hasAction = /启动|上线|拓展|优化|提升|建设|对接|落地/.test(notes);
-            if (!hasAction && lines.length > 2) {
-                suggestions.push({
-                    type: 'warning',
-                    title: '缺少行动导向',
-                    content: '建议明确下一步要做什么，使用行动词汇如"启动"、"上线"、"拓展"等'
-                });
-            }
-
-            // 检查是否过于口语化
-            const informalWords = /我们大家|大家一起|我们讨论了|我们觉得|我觉得/.test(notes);
-            if (informalWords) {
-                suggestions.push({
-                    type: 'info',
-                    title: '建议去除口语化表达',
-                    content: '去掉"我们讨论了"、"我们觉得"等冗余表述，直接陈述事实和结论'
-                });
-            }
-
-            // 如果没有问题
-            if (suggestions.length === 0) {
-                suggestions.push({
-                    type: 'success',
-                    title: '写得很好！',
-                    content: '你的会议纪要已经符合核心要求，结构清晰、数据完整、行动明确。'
-                });
-            }
-
-            // 渲染建议
-            let html = '';
-            suggestions.forEach(s => {
-                html += `
-                    <div class="result-item ${s.type}">
-                        <h4>${s.type === 'success' ? '🎉 ' : '💡 '}${s.title}</h4>
-                        <p>${s.content}</p>
-                    </div>
-                `;
-            });
-
-            suggestionsDiv.innerHTML = html;
-            resultDiv.style.display = 'block';
-
-            // 滚动到结果区域
-            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
-    </script>
 </body>
 </html>
