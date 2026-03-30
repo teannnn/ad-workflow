@@ -805,7 +805,7 @@
                 <div class="section-icon" style="background:var(--accent-light);color:var(--accent);">
                     <i data-lucide="book-open-text"></i>
                 </div>
-                <h2>8 大核心原则</h2>
+                <h2>9 大核心原则</h2>
             </div>
             <div class="principles-grid">
                 <div class="principle-card">
@@ -908,6 +908,24 @@
 
                 <div class="principle-card">
                     <div class="principle-num">8</div>
+                    <h3>行动事项必须标时间</h3>
+                    <ul>
+                        <li>提到要做的事就必须标注时间节点</li>
+                        <li>启动/上线/灰度/交付都要有日期</li>
+                        <li>没有时间的行动等于没有行动</li>
+                    </ul>
+                    <div class="principle-example principle-example-bad">
+                        <div class="ex-label">❌ 缺少时间</div>
+                        <p>xx功能即将上线；计划启动xx项目</p>
+                    </div>
+                    <div class="principle-example">
+                        <div class="ex-label">✅ 标注时间</div>
+                        <p>xx功能3月15日上线；xx项目4月1日启动灰度10%</p>
+                    </div>
+                </div>
+
+                <div class="principle-card">
+                    <div class="principle-num">9</div>
                     <h3>行动导向，明确下一步</h3>
                     <ul>
                         <li>明确责任人和时间节点</li>
@@ -1007,6 +1025,7 @@
                         <li>"较以往严格" → 缺少参照数据</li>
                         <li>"收入突破100万" → 缺环比/同比</li>
                         <li>"效果不错""进展顺利" → 没有数据</li>
+                        <li>"计划上线/启动" → 没有标注日期</li>
                         <li>纪要超过500字 → 手机端读不完</li>
                     </ul>
                 </div>
@@ -1022,6 +1041,7 @@
                         <li>"较历史均值32元降22%" → 对比有锚</li>
                         <li>"环比+35%/同比+120%" → 周期对比</li>
                         <li>"CPA 25元，CTR 3.2%" → 数据说话</li>
+                        <li>"4月1日灰度10%，4月15日全量" → 行动有时间</li>
                         <li>控制在500字以内 → 一屏读完</li>
                     </ul>
                 </div>
@@ -1173,7 +1193,44 @@
                 score -= Math.min(foundVagueTime.length * 4, 15);
             }
 
-            // 2c. 模糊程度词（缺数据支撑）
+            // 2c. 行动事项缺时间节点（核心新增）
+            // 检测逻辑：如果纪要中提到了"要做/计划做"某事，检查该句是否包含具体时间
+            const actionVerbs = [
+                '上线', '灰度', '放量', '启动', '开发', '接入', '对接', '排期',
+                '迁移', '推广', '发布', '测试', '联调', '提审', '回归', '部署',
+                '切量', '开放', '交付', '验收', '提测', '合入', '联测'
+            ];
+            const timeIndicators = /\d+月\d+日|\d+月底|\d+月中|\d{1,2}[\/\.]\d{1,2}|本周|下周|本月|下月|月底|月中|Q[1-4]|H[12]|\d+号|周[一二三四五六日]|已完成|已上线|已启动|\d+天内|\d+天后/;
+
+            const actionNoTime = [];
+            lines.forEach(line => {
+                // 对每一行，检查是否包含行动动词
+                const foundActions = actionVerbs.filter(v => line.includes(v));
+                if (foundActions.length > 0) {
+                    // 检查这一行是否有时间标记
+                    if (!timeIndicators.test(line)) {
+                        // 找出缺时间的行动词（取第一个就好）
+                        actionNoTime.push({
+                            verb: foundActions[0],
+                            line: line.trim().substring(0, 50) + (line.trim().length > 50 ? '…' : '')
+                        });
+                    }
+                }
+            });
+
+            if (actionNoTime.length > 0) {
+                const details = actionNoTime.slice(0, 5).map(a =>
+                    `提到 <span class="highlight-text">${a.verb}</span> 但未标注时间 → "${a.line}"`
+                ).join('<br>');
+                contentIssues.push({
+                    type: 'error',
+                    title: `${actionNoTime.length} 处行动事项缺时间节点`,
+                    content: `纪要中提到要做的事情必须标记时间（启动时间/上线时间/灰度时间等），否则无法追踪：<br>${details}<br><br>建议格式：<span class="suggest-text">"xx功能3月15日上线"</span> <span class="suggest-text">"3月20日灰度10%，4月1日全量"</span>`
+                });
+                score -= Math.min(actionNoTime.length * 6, 20);
+            }
+
+            // 2d. 模糊程度词（缺数据支撑）
             const vagueQuality = [
                 { pattern: /效果不错/g, word: '效果不错' },
                 { pattern: /表现良好/g, word: '表现良好' },
